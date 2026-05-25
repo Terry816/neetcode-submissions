@@ -1,0 +1,23 @@
+class Solution:
+    def validTree(self, n: int, edges: List[List[int]]) -> bool:
+        visit, cycle = set(), set()
+        d = {i:[] for i in range(n)}
+        for v1, v2 in edges:
+            d[v1].append(v2)
+            d[v2].append(v1)
+
+        def dfs(v, prev):
+            if v in cycle:
+                return False
+            cycle.add(v)
+            for neighbor in d[v]:
+                if neighbor == prev:
+                    continue
+                if not dfs(neighbor, v):
+                    return False
+            visit.add(v)
+            cycle.remove(v)
+            return True
+
+        dfs(0, -1)
+        return len(visit) == n
